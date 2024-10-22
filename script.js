@@ -1,92 +1,92 @@
-// Set the date we're counting down to
-var countDownDate = new Date("Jan 5, 2030 15:37:25").getTime();
-
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-  // Get today's date and time
-  var now = new Date().getTime();
-
-  // Find the distance between now and the count down date
-  var distance = countDownDate - now;
-
-  // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  // Display the result in the element with id="demo"
-  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-  + minutes + "m " + seconds + "s ";
-
-  // If the count down is finished, write some text
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("demo").innerHTML = "EXPIRED";
+class CountdownTimer {
+  constructor(targetDate, elementId) {
+    this.countDownDate = new Date(targetDate).getTime();
+    this.elementId = elementId;
+    this.start();
   }
-}, 1000);
 
-var swiper = new Swiper(".mySwiper", {
-  slidesPerView: 2,
-  spaceBetween: 10,
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-  breakpoints: {
-    640: {
-      slidesPerView: 2,
-      spaceBetween: 10,
+  start() {
+    this.interval = setInterval(() => this.update(), 1000);
+  }
+  
+  update() {
+    const now = new Date().getTime();
+    const distance = this.countDownDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const element = document.getElementById(this.elementId);
+    if (distance < 0) {
+      clearInterval(this.interval);
+      element.innerHTML = "EXPIRED";
+    } else {
+      element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+  }
+}
+
+class SwiperManager {
+  constructor(selector, options) {
+    this.selector = selector;
+    this.options = options;
+    this.init();
+  }
+
+  init() {
+    new Swiper(this.selector, this.options);
+  }
+}
+
+class ScrollAnimations {
+  constructor() {
+    this.setupAnimations();
+  }
+
+  setupAnimations() {
+    ScrollReveal().reveal(".top_nav", { origin: "bottom", distance: "20px", opacity: 0 });
+    ScrollReveal().reveal(".nav", { origin: "bottom", distance: "20px", opacity: 0, delay: 100 });
+    ScrollReveal().reveal(".header", { origin: "bottom", distance: "20px", opacity: 0, delay: 200 });
+    ScrollReveal().reveal(".section", { origin: "bottom", distance: "20px", opacity: 0, duration: 1000, delay: 100 });
+    ScrollReveal().reveal(".footer", { origin: "bottom", distance: "20px", opacity: 0, duration: 1000, delay: 100 });
+  }
+}
+
+class HamburgerMenu {
+  constructor(hamburgerSelector, navSelector) {
+    this.hamburger = document.querySelector(hamburgerSelector);
+    this.nav = document.querySelector(navSelector);
+    this.init();
+  }
+
+  init() {
+    this.hamburger.addEventListener("click", () => {
+      this.nav.classList.toggle("mobile_nav_hide");
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Countdown Timer
+  new CountdownTimer("Jan 5, 2030 15:37:25", "demo");
+
+  // Swiper Manager
+  new SwiperManager(".mySwiper", {
+    slidesPerView: 2,
+    spaceBetween: 10,
+    pagination: { el: ".swiper-pagination", clickable: true },
+    breakpoints: {
+      640: { slidesPerView: 2, spaceBetween: 10 },
+      768: { slidesPerView: 3, spaceBetween: 10 },
+      1024: { slidesPerView: 4, spaceBetween: 10 },
     },
-    768: {
-      slidesPerView: 3,
-      spaceBetween: 10,
-    },
-    1024: {
-      slidesPerView: 4,
-      spaceBetween: 10,
-    },
-  },
-});
+  });
 
-// Animations
-ScrollReveal().reveal(".top_nav", {
-  origin: "bottom",
-  distance: "20px",
-  opacity: 0,
-});
-ScrollReveal().reveal(".nav", {
-  origin: "bottom",
-  distance: "20px",
-  opacity: 0,
-  delay: 100,
-});
+  // Scroll Animations
+  new ScrollAnimations();
 
-ScrollReveal().reveal(".header", {
-  origin: "bottom",
-  distance: "20px",
-  opacity: 0,
-  delay: 200,
-});
-ScrollReveal().reveal(".section", {
-  origin: "bottom",
-  distance: "20px",
-  opacity: 0,
-  duration: 1000,
-  delay: 100,
-});
-ScrollReveal().reveal(".footer", {
-  origin: "bottom",
-  distance: "20px",
-  opacity: 0,
-  duration: 1000,
-  delay: 100,
-});
-
-const hamburger = document.querySelector(".hamburger");
-const Nav = document.querySelector(".mobile_nav");
-
-hamburger.addEventListener("click", () => {
-  Nav.classList.toggle("mobile_nav_hide");
+  // Hamburger Menu
+  new HamburgerMenu(".hamburger", ".mobile_nav");
 });
