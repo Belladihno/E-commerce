@@ -70,7 +70,7 @@ class HamburgerMenu {
 
 document.addEventListener("DOMContentLoaded", () => {
   // Countdown Timer
-  new CountdownTimer("Jan 5, 2030 15:37:25", "demo");
+  new CountdownTimer("Jan 5, 2025 15:37:25", "demo");
 
   // Swiper Manager
   new SwiperManager(".mySwiper", {
