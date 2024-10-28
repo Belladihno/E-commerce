@@ -8,20 +8,22 @@ class CountdownTimer {
   start() {
     this.interval = setInterval(() => this.update(), 1000);
   }
-  
+
   update() {
     const now = new Date().getTime();
     const distance = this.countDownDate - now;
 
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     const element = document.getElementById(this.elementId);
     if (distance < 0) {
       clearInterval(this.interval);
-      element.innerHTML = "EXPIRED";
+      element.innerHTML = 'EXPIRED';
     } else {
       element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
@@ -46,11 +48,37 @@ class ScrollAnimations {
   }
 
   setupAnimations() {
-    ScrollReveal().reveal(".top_nav", { origin: "bottom", distance: "20px", opacity: 0 });
-    ScrollReveal().reveal(".nav", { origin: "bottom", distance: "20px", opacity: 0, delay: 100 });
-    ScrollReveal().reveal(".header", { origin: "bottom", distance: "20px", opacity: 0, delay: 200 });
-    ScrollReveal().reveal(".section", { origin: "bottom", distance: "20px", opacity: 0, duration: 1000, delay: 100 });
-    ScrollReveal().reveal(".footer", { origin: "bottom", distance: "20px", opacity: 0, duration: 1000, delay: 100 });
+    ScrollReveal().reveal('.top_nav', {
+      origin: 'bottom',
+      distance: '20px',
+      opacity: 0,
+    });
+    ScrollReveal().reveal('.nav', {
+      origin: 'bottom',
+      distance: '20px',
+      opacity: 0,
+      delay: 100,
+    });
+    ScrollReveal().reveal('.header', {
+      origin: 'bottom',
+      distance: '20px',
+      opacity: 0,
+      delay: 200,
+    });
+    ScrollReveal().reveal('.section', {
+      origin: 'bottom',
+      distance: '20px',
+      opacity: 0,
+      duration: 1000,
+      delay: 100,
+    });
+    ScrollReveal().reveal('.footer', {
+      origin: 'bottom',
+      distance: '20px',
+      opacity: 0,
+      duration: 1000,
+      delay: 100,
+    });
   }
 }
 
@@ -62,21 +90,21 @@ class HamburgerMenu {
   }
 
   init() {
-    this.hamburger.addEventListener("click", () => {
-      this.nav.classList.toggle("mobile_nav_hide");
+    this.hamburger.addEventListener('click', () => {
+      this.nav.classList.toggle('mobile_nav_hide');
     });
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Countdown Timer
-  new CountdownTimer("Jan 5, 2025 15:37:25", "demo");
+  new CountdownTimer('Jan 5, 2025 15:37:25', 'demo');
 
   // Swiper Manager
-  new SwiperManager(".mySwiper", {
+  new SwiperManager('.mySwiper', {
     slidesPerView: 2,
     spaceBetween: 10,
-    pagination: { el: ".swiper-pagination", clickable: true },
+    pagination: { el: '.swiper-pagination', clickable: true },
     breakpoints: {
       640: { slidesPerView: 2, spaceBetween: 10 },
       768: { slidesPerView: 3, spaceBetween: 10 },
@@ -88,5 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
   new ScrollAnimations();
 
   // Hamburger Menu
-  new HamburgerMenu(".hamburger", ".mobile_nav");
+  new HamburgerMenu('.hamburger', '.mobile_nav');
 });
+
+
