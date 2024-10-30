@@ -21,8 +21,6 @@ class Cart {
     const addToCartButtons = document.querySelectorAll(".add_to_cart");
     addToCartButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        
-        // const id = button.getAttribute("data-id");
         const title = button.getAttribute("data-title");
         const image = button.getAttribute("data-image");
         const price = button.getAttribute("data-price");
@@ -73,7 +71,6 @@ class Cart {
   removeItem(itemId) {
     this.cart = this.cart.filter(item => item.id !== itemId);
     this.saveCart();
-    // this.displayAllCartItems();
     window.location.reload()
   }
   
