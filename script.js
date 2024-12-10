@@ -88,7 +88,7 @@ class HamburgerMenu {
     this.nav = document.querySelector(navSelector);
     this.init();
   }
-
+  
   init() {
     this.hamburger.addEventListener('click', () => {
       this.nav.classList.toggle('mobile_nav_hide');
