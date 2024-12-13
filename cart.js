@@ -3,28 +3,10 @@ class Product {
     this.id = Math.random().toString(16).slice(2);
     this.title = title;
     this.image = image;
-    this.price = parseFloat(price); // Ensure price is a number
+    this.price = parseFloat(price); 
     this.quantity = 1;
   }
 }
-
-class HamburgerMenu {
-  constructor(hamburgerSelector, navSelector) {
-    this.hamburger = document.querySelector(hamburgerSelector);
-    this.nav = document.querySelector(navSelector);
-    this.init();
-  }
-  
-  init() {
-    this.hamburger.addEventListener('click', () => {
-      this.nav.classList.toggle('mobile_nav_hide');
-    });
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  new HamburgerMenu('.hamburger', '.mobile_nav');
-});
 
 class Cart {
   constructor() {
@@ -33,6 +15,20 @@ class Cart {
     this.totalPriceElement = document.querySelector(".total-price");
     this.initAddToCartButtons();
     this.refreshCartDisplay();
+    this.initHamburgerMenu(".hamburger", ".mobile_nav"); 
+  }
+
+  initHamburgerMenu(hamburgerSelector, navSelector) {
+    const hamburger = document.querySelector(hamburgerSelector);
+    const nav = document.querySelector(navSelector);
+
+    if (hamburger && nav) {
+      hamburger.addEventListener("click", () => {
+        nav.classList.toggle("mobile_nav_hide");
+      });
+    } else {
+      console.error("Hamburger menu or navigation element not found.");
+    }
   }
 
   initAddToCartButtons() {
@@ -51,36 +47,33 @@ class Cart {
 
   addToCart(product) {
     const existingProduct = this.cart.find((item) => item.title === product.title);
-  
     if (existingProduct) {
       existingProduct.quantity += 1;
     } else {
       this.cart.push(product);
     }
-  
+
     this.showPopup(`${product.title} has been added to the cart!`);
-  
     this.saveCart();
     this.refreshCartDisplay();
   }
-  
+
   showPopup(message) {
     const popup = document.createElement("div");
     popup.className = "cart-popup";
     popup.innerText = message;
-  
+
     document.body.appendChild(popup);
-  
-    // Automatically remove popup after 3 seconds
+
     setTimeout(() => {
       popup.remove();
     }, 3000);
   }
 
   refreshCartDisplay() {
-    this.cartItemsElement.innerHTML = ""; // Clear items
+    this.cartItemsElement.innerHTML = "";
     this.cart.forEach((item, i) => this.displayCartItem(item, i));
-    this.updateTotalPrice(); // Update the total price in the DOM
+    this.updateTotalPrice();
     this.deleteButtons();
   }
 
@@ -99,8 +92,8 @@ class Cart {
   }
 
   updateTotalPrice() {
-    const total = this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0); // Calculate total price
-    this.totalPriceElement.innerHTML = `Total: $${total.toFixed(2)}`; // Update total in DOM
+    const total = this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    this.totalPriceElement.innerHTML = `Total: $${total.toFixed(2)}`;
   }
 
   deleteButtons() {
@@ -118,7 +111,6 @@ class Cart {
     this.saveCart();
     this.refreshCartDisplay();
   }
-  
 
   saveCart() {
     localStorage.setItem("cart", JSON.stringify(this.cart));
