@@ -41,9 +41,12 @@
             <img src="Icons/search.png" alt="" class="nav_search" />
           </form>
           <img src="Icons/Wishlist.png" alt="" class="nav_wishlist" />
-          <a href="/cart.html"
-            ><img src="Icons/Cart1 with buy.png" alt="" class="nav_cart"
-          /></a>
+          <div class="cart-icon" class="nav-cart-container">
+            <a href="/cart.html" >
+              <img src="Icons/Cart1 with buy.png" alt="Cart" class="nav_cart" />
+            </a>
+            <span class="cart-badge">0</span>
+          </div>
         </div>
         <span class="hamburger">
           <svg
@@ -77,8 +80,9 @@
         <li class="mobile_nav_item">
           <a href="/sign-up.html" class="mobile_nav_link">Sign Up</a>
         </li>
-        <li class="mobile_nav_item">
+        <li class="mobile_nav_item nav-cart-container">
           <a href="/cart.html" class="mobile_nav_link">Cart</a>
+          <!-- <span class="cart-badge">0</span> -->
         </li>
       </ul>
     </nav>
@@ -94,9 +98,7 @@
             <p class="cart_header_price">Total Price</p>
             <p class="cart_header_delete">Action</p>
           </div>
-          <div class="cart-items">
-            
-          </div>
+          <div class="cart-items"></div>
         </div>
       </div>
     </section>
@@ -105,18 +107,14 @@
       <div class="container">
         <div class="total">
           <h3 class="total-title">Cart Summary</h3>
-          <p class="total-price">Total: $0.00</p> 
+          <p class="total-price">Total: $0.00</p>
         </div>
       </div>
     </section>
-    
 
     <footer class="footer">
-      <div class="container footer_container">
-        
-      </div>
+      <div class="container footer_container"></div>
     </footer>
     <script src="cart.js"></script>
-    <!-- <script src="script.js"></script> -->
   </body>
 </html>

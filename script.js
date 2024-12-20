@@ -23,7 +23,7 @@ class CountdownTimer {
     const element = document.getElementById(this.elementId);
     if (distance < 0) {
       clearInterval(this.interval);
-      element.innerHTML = 'EXPIRED';
+      element.innerHTML = "EXPIRED";
     } else {
       element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
@@ -48,33 +48,33 @@ class ScrollAnimations {
   }
 
   setupAnimations() {
-    ScrollReveal().reveal('.top_nav', {
-      origin: 'bottom',
-      distance: '20px',
+    ScrollReveal().reveal(".top_nav", {
+      origin: "bottom",
+      distance: "20px",
       opacity: 0,
     });
-    ScrollReveal().reveal('.nav', {
-      origin: 'bottom',
-      distance: '20px',
+    ScrollReveal().reveal(".nav", {
+      origin: "bottom",
+      distance: "20px",
       opacity: 0,
       delay: 100,
     });
-    ScrollReveal().reveal('.header', {
-      origin: 'bottom',
-      distance: '20px',
+    ScrollReveal().reveal(".header", {
+      origin: "bottom",
+      distance: "20px",
       opacity: 0,
       delay: 200,
     });
-    ScrollReveal().reveal('.section', {
-      origin: 'bottom',
-      distance: '20px',
+    ScrollReveal().reveal(".section", {
+      origin: "bottom",
+      distance: "20px",
       opacity: 0,
       duration: 1000,
       delay: 100,
     });
-    ScrollReveal().reveal('.footer', {
-      origin: 'bottom',
-      distance: '20px',
+    ScrollReveal().reveal(".footer", {
+      origin: "bottom",
+      distance: "20px",
       opacity: 0,
       duration: 1000,
       delay: 100,
@@ -88,23 +88,52 @@ class HamburgerMenu {
     this.nav = document.querySelector(navSelector);
     this.init();
   }
-  
+
   init() {
-    this.hamburger.addEventListener('click', () => {
-      this.nav.classList.toggle('mobile_nav_hide');
+    this.hamburger.addEventListener("click", () => {
+      this.nav.classList.toggle("mobile_nav_hide");
     });
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Countdown Timer
-  new CountdownTimer('Jan 5, 2025 15:37:25', 'demo');
+class CartBadge {
+  constructor(cartStorage = "cart") {
+    this.cartStorage = cartStorage;
+    this.cartBadgeElement = document.querySelector(".cart-badge-html");
+    this.init();
+  }
 
-  // Swiper Manager
-  new SwiperManager('.mySwiper', {
+  init() {
+    this.updateBadge();
+  }
+
+  updateBadge() {
+    const cart = JSON.parse(localStorage.getItem(this.cartStorage)) || [];
+    const uniqueProductsCount = cart.length;
+    this.cartBadgeElement.textContent = uniqueProductsCount;
+    this.cartBadgeElement.style.display = uniqueProductsCount > 0 ? "flex" : "none";
+  }
+
+  addItemToCart(item) {
+    const cart = JSON.parse(localStorage.getItem(this.cartStorage)) || [];
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+
+    if (!existingItem) {
+      cart.push(item);
+    }
+
+    localStorage.setItem(this.cartStorage, JSON.stringify(cart));
+    this.updateBadge();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  new CountdownTimer("Jan 5, 2025 15:37:25", "demo");
+
+  new SwiperManager(".mySwiper", {
     slidesPerView: 2,
     spaceBetween: 10,
-    pagination: { el: '.swiper-pagination', clickable: true },
+    pagination: { el: ".swiper-pagination", clickable: true },
     breakpoints: {
       640: { slidesPerView: 2, spaceBetween: 10 },
       768: { slidesPerView: 3, spaceBetween: 10 },
@@ -112,11 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   });
 
-  // Scroll Animations
   new ScrollAnimations();
 
-  // Hamburger Menu
-  new HamburgerMenu('.hamburger', '.mobile_nav');
+  new HamburgerMenu(".hamburger", ".mobile_nav");
+
+  const cartBadge = new CartBadge();
+
+  // Example of dynamically adding items to the cart
+  document.querySelector(".add-to-cart-button").addEventListener("click", () => {
+    const newItem = { id: 1, name: "Product Name", quantity: 1 };
+    cartBadge.addItemToCart(newItem);
+  });
 });
-
-
