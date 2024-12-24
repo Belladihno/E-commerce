@@ -82,50 +82,47 @@ class ScrollAnimations {
   }
 }
 
-class HamburgerMenu {
-  constructor(hamburgerSelector, navSelector) {
-    this.hamburger = document.querySelector(hamburgerSelector);
-    this.nav = document.querySelector(navSelector);
-    this.init();
-  }
-
-  init() {
-    this.hamburger.addEventListener("click", () => {
-      this.nav.classList.toggle("mobile_nav_hide");
-    });
-  }
-}
-
 class CartBadge {
   constructor(cartStorage = "cart") {
     this.cartStorage = cartStorage;
-    this.cartBadgeElement = document.querySelector(".cart-badge-html");
+    this.cartBadgeElement = document.querySelectorAll("#cart-badge-html");
     this.init();
   }
-
+  
   init() {
     this.updateBadge();
   }
-
+  
   updateBadge() {
     const cart = JSON.parse(localStorage.getItem(this.cartStorage)) || [];
-    const uniqueProductsCount = cart.length;
-    this.cartBadgeElement.textContent = uniqueProductsCount;
-    this.cartBadgeElement.style.display = uniqueProductsCount > 0 ? "flex" : "none";
+    const totalProducts = cart.length;
+    this.cartBadgeElement.forEach(badgeElement => {
+      if (badgeElement) {
+        badgeElement.textContent = totalProducts;
+        badgeElement.style.display = totalProducts > 0 ? "flex" : "none";
+      } 
+    });
   }
-
-  addItemToCart(item) {
+  
+  addItemToCart(button) {
     const cart = JSON.parse(localStorage.getItem(this.cartStorage)) || [];
-    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    const itemId = button.getAttribute("data-id");
+    const existingItem = cart.find((cartItem) => cartItem.id === itemId);
 
     if (!existingItem) {
-      cart.push(item);
+      const newItem = {
+        id: itemId,
+        name: button.getAttribute("data-title"),
+        image: button.getAttribute("data-image"),
+        price: parseFloat(button.getAttribute("data-price")),
+        quantity: 1
+      };
+      cart.push(newItem);
     }
-
-    localStorage.setItem(this.cartStorage, JSON.stringify(cart));
     this.updateBadge();
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   new CountdownTimer("Jan 5, 2025 15:37:25", "demo");
@@ -143,13 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   new ScrollAnimations();
 
-  new HamburgerMenu(".hamburger", ".mobile_nav");
-
   const cartBadge = new CartBadge();
-
-  // Example of dynamically adding items to the cart
-  document.querySelector(".add-to-cart-button").addEventListener("click", () => {
-    const newItem = { id: 1, name: "Product Name", quantity: 1 };
-    cartBadge.addItemToCart(newItem);
+  
+  document.querySelectorAll(".add_to_cart").forEach(button => {
+    button.addEventListener("click", () => {
+      cartBadge.addItemToCart(button);
+    });
   });
 });

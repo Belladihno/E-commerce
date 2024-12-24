@@ -43,10 +43,10 @@
             <img src="Icons/search.png" alt="" class="nav_search" />
           </form>
           <img src="Icons/Wishlist.png" alt="" class="nav_wishlist" />
-          <a href="/cart.html"
-            class="nav-cart-container"><img src="Icons/Cart1 with buy.png" alt="" class="nav_cart"
+          <a href="/cart.html" class="nav-cart-container"
+            ><img src="Icons/Cart1 with buy.png" alt="" class="nav_cart"
           /></a>
-          <span class="cart-badge-html">0</span>
+          <span id="cart-badge-html" class="cart-badge-main">0</span>
         </div>
         <span class="hamburger">
           <svg
@@ -80,8 +80,9 @@
         <li class="mobile_nav_item">
           <a href="/sign-up.html" class="mobile_nav_link">Sign Up</a>
         </li>
-        <li class="mobile_nav_item">
+        <li class="mobile_nav_item nav-cart-container">
           <a href="/cart.html" class="mobile_nav_link">Cart</a>
+          <span id="cart-badge-html" class="cart-badge-mobile">0</span>
         </li>
       </ul>
     </nav>

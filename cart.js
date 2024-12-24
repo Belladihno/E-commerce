@@ -13,7 +13,7 @@ class Cart {
     this.cart = this.loadCart();
     this.cartItemsElement = document.querySelector(".cart-items");
     this.totalPriceElement = document.querySelector(".total-price");
-    this.cartBadgeElement = document.querySelector(".cart_badge");
+    this.cartBadgeElement = document.querySelectorAll("#cart-badge");
     this.initAddToCartButtons();
     this.refreshCartDisplay();
     this.initHamburgerMenu(".hamburger", ".mobile_nav");
@@ -22,16 +22,14 @@ class Cart {
   initHamburgerMenu(hamburgerSelector, navSelector) {
     const hamburger = document.querySelector(hamburgerSelector);
     const nav = document.querySelector(navSelector);
-
+    
     if (hamburger && nav) {
       hamburger.addEventListener("click", () => {
         nav.classList.toggle("mobile_nav_hide");
       });
-    } else {
-      console.error("Hamburger menu or navigation element not found.");
     }
   }
-
+  
   initAddToCartButtons() {
     const addToCartButtons = document.querySelectorAll(".add_to_cart");
     addToCartButtons.forEach((button) => {
@@ -59,6 +57,17 @@ class Cart {
     this.refreshCartDisplay();
     this.updateCartBadge();
   }
+  
+  addProductToCart(product) {
+    const existingProduct = this.cart.find((item) => item.id === product.id);
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+    } else {
+      this.cart.push(product);
+    }
+    this.saveCart();
+    this.refreshCartDisplay();
+  }
 
   showPopup(message) {
     const popup = document.createElement("div");
@@ -71,15 +80,23 @@ class Cart {
       popup.remove();
     }, 3000);
   }
-
+  
   refreshCartDisplay() {
-    this.cartItemsElement.innerHTML = "";
-    this.cart.forEach((item, i) => this.displayCartItem(item, i));
-    this.updateTotalPrice();
-    this.updateCartBadge();
-    this.deleteButtons();
-  }
+    if (this.cartItemsElement) {
+      this.cartItemsElement.innerHTML = "";
+      this.cart.forEach((product, index) => {
+        this.displayCartItem(product, index);
+      });
+    }
 
+    if (this.totalPriceElement) {
+      const totalPrice = this.cart.reduce((total, product) => total + product.price * product.quantity, 0);
+      this.totalPriceElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
+    }
+
+    this.updateCartBadge();
+  }
+  
   displayCartItem(item, index) {
     const cartItem = document.createElement("div");
     cartItem.className = "cart_item";
@@ -101,20 +118,26 @@ class Cart {
 
     const decreaseButton = cartItem.querySelector(".quantity-decrease");
     const increaseButton = cartItem.querySelector(".quantity-increase");
+    const deleteButton = cartItem.querySelector(".cart_delete");
 
-    decreaseButton.addEventListener("click", () => {
-      this.changeQuantity(item.id, -1);
-    });
-
-    increaseButton.addEventListener("click", () => {
-      this.changeQuantity(item.id, 1);
-    });
+    decreaseButton.addEventListener("click", () => this.decreaseQuantity(item.id));
+    increaseButton.addEventListener("click", () => this.increaseQuantity(item.id));
+    deleteButton.addEventListener("click", () => this.removeItem(item.id));
+  }
+    
+  decreaseQuantity(id) {
+    const product = this.cart.find((item) => item.id === id);
+    if (product && product.quantity > 1) {
+      product.quantity -= 1;
+      this.saveCart();
+      this.refreshCartDisplay();
+    }
   }
 
-  changeQuantity(itemId, changeAmount) {
-    const item = this.cart.find((item) => item.id === itemId);
-    if (item) {
-      item.quantity = Math.max(1, item.quantity + changeAmount);
+  increaseQuantity(id) {
+    const product = this.cart.find((item) => item.id === id);
+    if (product) {
+      product.quantity += 1;
       this.saveCart();
       this.refreshCartDisplay();
     }
@@ -124,14 +147,15 @@ class Cart {
     const total = this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     this.totalPriceElement.innerHTML = `Total: $${total.toFixed(2)}`;
   }
-
+  
   updateCartBadge() {
-    const totalQuantity = this.cart.length;
-    const cartBadge = document.querySelector('.cart-badge');
-    if (cartBadge) {
-      cartBadge.textContent = totalQuantity;
-      cartBadge.style.display = totalQuantity >= 0 ? "flex" : "none";
-    }
+    const totalProducts = this.cart.length;
+    this.cartBadgeElement.forEach(badgeElement => {
+      if (badgeElement) {
+        badgeElement.textContent = totalProducts;
+        badgeElement.style.display = totalProducts >= 0 ? "flex" : "none";
+      }
+    });
   }
 
   deleteButtons() {
